@@ -22,8 +22,8 @@ Python 기본 문법과 표준 라이브러리만 사용했고, 클래스로 역
 
 ```bash
 # 1. 저장소 복제
-git clone https://github.com/<내-GitHub-아이디>/<저장소-이름>.git
-cd <저장소-이름>
+git clone https://github.com/yeonwoo7673/2026_02_Python-Git-Basic.git
+cd <2026_02_python-git-basic>
 
 # 2. Python 버전 확인 (3.10 이상)
 python --version
@@ -31,6 +31,8 @@ python --version
 # 3. 실행 (macOS/Linux에서 python이 없으면 python3)
 python main.py
 ```
+
+![버전 확인, 실행](docs/screenshots/02.python%20--version,%20main.py.png)
 
 - 메뉴에서 번호를 입력해 기능을 고릅니다.
 - 실행 중 `Ctrl+C`를 눌러도 데이터를 저장한 뒤 안전하게 종료됩니다.
@@ -81,8 +83,8 @@ python main.py
 │   └── screenshots/     # 실행 화면 캡처
 ├── .gitignore
 └── README.md
-![파일 구조](docs/screenshots/01.dicrectory.png)
 ```
+![파일 구조](docs/screenshots/01.dicrectory.png)
 
 ### 클래스별 역할
 | 클래스 | 책임 |
