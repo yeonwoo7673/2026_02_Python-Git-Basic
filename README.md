@@ -2,29 +2,16 @@
 
 ## 프로젝트 개요
 
-<<<<<<< HEAD
 - 터미널에서 실행하는 객관식 퀴즈 게임
 - **Python 기본 문법**, **표준 라이브러리 사용**, **클래스별 역할 구분**
 - 퀴즈, 점수 기록은 `state.json`에 저장, 프로그램 종료/시작 후 유지
 - 언어: Python 3.12.10
 - 표준 라이브러리: `json`, `random`, `datetime`, `pathlib`, `os`
-=======
-터미널에서 실행하는 객관식 퀴즈 게임입니다.
-Python 기본 문법과 표준 라이브러리만 사용했고, 클래스로 역할을 나눠 구성했습니다.
-퀴즈와 점수 기록은 `state.json`에 저장되어, 프로그램을 껐다 켜도 그대로 유지됩니다.
-
-- 언어: Python 3.10 이상 (외부 라이브러리 없음)
-- 사용한 표준 라이브러리: `json`, `random`, `datetime`, `pathlib`, `os`
->>>>>>> 7d7a35a35fba8f19133b8dece098e4bda9036e37
 
 ## 퀴즈 주제와 선정 이유
 
 **주제: 개발자 기초 상식 (Python · Git · 웹 · DB · 객체 지향)**
-
-<!-- ✏️ 아래 이유는 본인 생각으로 다시 써 주세요. -->
-이번 과정에서 배우는 Python과 Git, 그리고 실무에서 매일 쓰는 HTTP·SQL·JSON 같은 기초 개념을
-문제로 만들어 스스로 점검하고 싶었습니다. 문제를 직접 만들면서 "정확히 설명할 수 있는가"를
-확인할 수 있었고, 힌트를 쓰면서 개념을 한 줄로 요약하는 연습도 됐습니다.
+이번 과정에서 Python을 활용해 문제를 만들고, 풀고, 추가하고, 삭제하는 메서드를 구현하고 싶었습니다. 힌트와 보너스 개념 또한 추가하여 진짜 게임을 하는 것 같은 느낌이 들도록 하고 싶었습니다.
 
 ## 실행 방법
 
@@ -34,11 +21,7 @@ git clone https://github.com/yeonwoo7673/2026_02_Python-Git-Basic.git
 cd <2026_02_python-git-basic>
 
 # 2. Python 버전 확인 (3.10 이상)
-<<<<<<< HEAD
 python 3.12.10
-=======
-python --version
->>>>>>> 7d7a35a35fba8f19133b8dece098e4bda9036e37
 
 # 3. 실행 (macOS/Linux에서 python이 없으면 python3)
 python main.py
@@ -96,7 +79,6 @@ python main.py
 ├── .gitignore
 └── README.md
 ```
-![파일 구조](docs/screenshots/01.dicrectory.png)
 
 ### 클래스별 역할
 | 클래스 | 책임 |
@@ -167,4 +149,4 @@ python main.py
 
 | 퀴즈 추가 | 점수 확인 |
 |---|---|
-| ![add](docs/screenshots/add_quiz.png) | ![score](docs/screenshots/score.png) |
+| ![add](docs/screenshots/add_quiz.png) | ![score](docs/screenshots/score.png)
