@@ -100,10 +100,18 @@ class QuizGame:
         answer = read_int(f"정답 번호 (1-{Quiz.CHOICE_COUNT}): ", 1, Quiz.CHOICE_COUNT)
 
         self.quizzes.append(Quiz(question, choices, answer))
-        print("\n✅ 퀴즈가 추가되었습니다!\n") 
+        print("\n✅ 퀴즈가 추가되었습니다!\n")
 
     def list_quizzes(self):
-        print("🚧 준비 중입니다.\n")
+        if not self.quizzes:
+            print("📭 등록된 퀴즈가 없습니다.\n")
+            return
+        print(f"📋 등록된 퀴즈 목록 (총 {len(self.quizzes)}개)\n")
+        print(THIN_LINE)
+        for number, quiz in enumerate(self.quizzes, start=1):
+            print(f"[{number}] {quiz.question}")
+        print(THIN_LINE)
+        print()
 
     def show_score(self):
         print("🚧 준비 중입니다.\n")
