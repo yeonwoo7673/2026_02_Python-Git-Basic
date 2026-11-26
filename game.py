@@ -81,8 +81,16 @@ class QuizGame:
         return read_int(f"정답 입력 (1-{Quiz.CHOICE_COUNT}): ", 1, Quiz.CHOICE_COUNT)
 
     def _finish_game(self, total, correct, score):
+        is_new_best = self.best_score is None or score > self.best_score
+        if is_new_best:
+            self.best_score = score
+
         print(LINE)
         print(f"🏆 결과: {total}문제 중 {correct}문제 정답! ({score}점)")
+        if is_new_best:
+            print("🎉 새로운 최고 점수입니다!")
+        else:
+            print(f"   (최고 점수: {self.best_score}점)")
         print(LINE + "\n")
 
     def add_quiz(self):
@@ -114,7 +122,10 @@ class QuizGame:
         print()
 
     def show_score(self):
-        print("🚧 준비 중입니다.\n")
+        if self.best_score is None:
+            print("📭 아직 퀴즈를 풀지 않았습니다. '퀴즈 풀기'로 첫 기록을 남겨 보세요!\n")
+            return
+        print(f"🏆 최고 점수: {self.best_score}점\n")
 
     def save_state(self):
         return False
