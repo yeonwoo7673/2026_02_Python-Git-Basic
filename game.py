@@ -3,12 +3,12 @@
 
 import random
 from default_quizzes import get_default_quizzes
-from input_handler import read_int, read_text
+from input_handler import parse_int, read_int, read_line, read_text
 from quiz import Quiz
 from storage import StateFileError
 
 POINTS_PER_QUESTION = 10   # 문제당 배점
-LINE = "=" * 40
+HINT_PENALTY = 5           # 힌트를 보고 맞히면 차감되는 점수LINE = "=" * 40
 THIN_LINE = "-" * 40
 
 
@@ -62,37 +62,64 @@ class QuizGame:
         count = read_int(f"몇 문제를 풀까요? (1-{available}): ", 1, available)
         selected = random.sample(self.quizzes, count)  # 중복 없이 무작위로 뽑기 = 섞기
 
-        print(f"\n📝 퀴즈를 시작합니다! (총 {count}문제, 순서 랜덤)")
         # 1 → "몇 문제를 풀까요? (1-퀴즈 개수)" / `0`, `99` 거절 / `2` → 2문제만 출제
+        print(f"\n📝 퀴즈를 시작합니다! (총 {count}문제, 순서 랜덤)")
+        print(f"💡 표시가 있는 문제는 h를 입력하면 힌트를 볼 수 있어요. (정답 시 {HINT_PENALTY}점 차감)")
 
         correct_count = 0
+        hints_used = 0
         earned = 0
         for number, quiz in enumerate(selected, start=1):
             print(THIN_LINE)
             quiz.display(number)
-            answer = self._ask_answer(quiz)
+            answer, used_hint = self._ask_answer(quiz)
+            if used_hint:
+                hints_used += 1
 
             if quiz.is_correct(answer):
+                gained = POINTS_PER_QUESTION - (HINT_PENALTY if used_hint else 0)
                 correct_count += 1
-                earned += POINTS_PER_QUESTION
-                print(f"✅ 정답입니다! (+{POINTS_PER_QUESTION}점)\n")
+                earned += gained
+                print(f"✅ 정답입니다! (+{gained}점)\n")
             else:
                 print(f"❌ 오답입니다. 정답은 {quiz.answer}번 '{quiz.answer_text}'입니다.\n")
 
         score = round(earned / (count * POINTS_PER_QUESTION) * 100)
-        self._finish_game(count, correct_count, score)
+        self._finish_game(count, correct_count, hints_used, score)
 
     def _ask_answer(self, quiz):
-        """1~4 사이의 정답 번호를 입력받는다."""
-        return read_int(f"정답 입력 (1-{Quiz.CHOICE_COUNT}): ", 1, Quiz.CHOICE_COUNT)
+        """정답 번호를 입력받는다. h 입력 시 힌트를 보여준다.
 
-    def _finish_game(self, total, correct, score):
+        돌려주는 값: (정답 번호, 힌트 사용 여부)
+        """
+        used_hint = False
+        prompt = "정답 입력 (1-4, 힌트 h): " if quiz.has_hint() else "정답 입력 (1-4): "
+        while True:
+            text = read_line(prompt)
+            if text.lower() == "h":
+                if not quiz.has_hint():
+                    print("🙅 이 문제에는 힌트가 없습니다.")
+                else:
+                    if not used_hint:
+                        print(f"(힌트 사용: 이 문제는 맞혀도 {HINT_PENALTY}점 차감)")
+                    used_hint = True
+                    print(f"💡 힌트: {quiz.hint}")
+                continue
+
+            value, error = parse_int(text, 1, Quiz.CHOICE_COUNT)
+            if error is None:
+                return value, used_hint
+            print(f"⚠️ {error}")
+
+    def _finish_game(self, total, correct, hints_used, score):
         is_new_best = self.best_score is None or score > self.best_score
         if is_new_best:
             self.best_score = score
 
         print(LINE)
         print(f"🏆 결과: {total}문제 중 {correct}문제 정답! ({score}점)")
+        if hints_used:
+            print(f"   힌트 사용: {hints_used}회")
         if is_new_best:
             print("🎉 새로운 최고 점수입니다!")
         else:
@@ -113,8 +140,9 @@ class QuizGame:
             choices.append(choice)
 
         answer = read_int(f"정답 번호 (1-{Quiz.CHOICE_COUNT}): ", 1, Quiz.CHOICE_COUNT)
+        hint = read_line("힌트 (없으면 그냥 Enter): ")
 
-        self.quizzes.append(Quiz(question, choices, answer))
+        self.quizzes.append(Quiz(question, choices, answer, hint))
         if self.save_state():
             print("\n✅ 퀴즈가 추가되었습니다!\n")
         else:
@@ -131,7 +159,8 @@ class QuizGame:
     def _print_quiz_lines(self):
         print(THIN_LINE)
         for number, quiz in enumerate(self.quizzes, start=1):
-            print(f"[{number}] {quiz.question}")
+            mark = " 💡" if quiz.has_hint() else ""
+            print(f"[{number}] {quiz.question}{mark}")
         print(THIN_LINE)
 
     def show_score(self):
