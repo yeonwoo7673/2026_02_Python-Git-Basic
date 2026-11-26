@@ -1,6 +1,7 @@
 ```python
 """게임 전체 흐름을 관리하는 QuizGame 클래스."""
 
+import random
 from default_quizzes import get_default_quizzes
 from input_handler import read_int, read_text
 from quiz import Quiz
@@ -57,9 +58,9 @@ class QuizGame:
             print("📭 등록된 퀴즈가 없습니다. 먼저 '퀴즈 추가'로 퀴즈를 등록해 주세요.\n")
             return
 
-        selected = self.quizzes
-        count = len(selected)
-        print(f"📝 퀴즈를 시작합니다! (총 {count}문제)")
+        count = len(self.quizzes)
+        selected = random.sample(self.quizzes, count)  # 중복 없이 무작위로 뽑기 = 섞기
+        print(f"📝 퀴즈를 시작합니다! (총 {count}문제, 순서 랜덤)")
 
         correct_count = 0
         earned = 0
