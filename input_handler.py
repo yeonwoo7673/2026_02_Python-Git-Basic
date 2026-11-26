@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 ```python
+=======
+>>>>>>> 7d7a35a35fba8f19133b8dece098e4bda9036e37
 """사용자 입력을 받고 검증하는 함수 모음.
 
 공통 입력 기준:
@@ -58,5 +61,8 @@ def read_yes_no(prompt):
         if text in ("n", "no", "아니오", "아니요"):
             return False
         print("⚠️ y 또는 n을 입력하세요.")
+<<<<<<< HEAD
 
 ```
+=======
+>>>>>>> 7d7a35a35fba8f19133b8dece098e4bda9036e37

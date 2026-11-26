@@ -2,11 +2,20 @@
 
 ## 프로젝트 개요
 
+<<<<<<< HEAD
 - 터미널에서 실행하는 객관식 퀴즈 게임
 - **Python 기본 문법**, **표준 라이브러리 사용**, **클래스별 역할 구분**
 - 퀴즈, 점수 기록은 `state.json`에 저장, 프로그램 종료/시작 후 유지
 - 언어: Python 3.12.10
 - 표준 라이브러리: `json`, `random`, `datetime`, `pathlib`, `os`
+=======
+터미널에서 실행하는 객관식 퀴즈 게임입니다.
+Python 기본 문법과 표준 라이브러리만 사용했고, 클래스로 역할을 나눠 구성했습니다.
+퀴즈와 점수 기록은 `state.json`에 저장되어, 프로그램을 껐다 켜도 그대로 유지됩니다.
+
+- 언어: Python 3.10 이상 (외부 라이브러리 없음)
+- 사용한 표준 라이브러리: `json`, `random`, `datetime`, `pathlib`, `os`
+>>>>>>> 7d7a35a35fba8f19133b8dece098e4bda9036e37
 
 ## 퀴즈 주제와 선정 이유
 
@@ -25,7 +34,11 @@ git clone https://github.com/yeonwoo7673/2026_02_Python-Git-Basic.git
 cd <2026_02_python-git-basic>
 
 # 2. Python 버전 확인 (3.10 이상)
+<<<<<<< HEAD
 python 3.12.10
+=======
+python --version
+>>>>>>> 7d7a35a35fba8f19133b8dece098e4bda9036e37
 
 # 3. 실행 (macOS/Linux에서 python이 없으면 python3)
 python main.py
