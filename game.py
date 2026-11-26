@@ -16,6 +16,13 @@ class QuizGame:
     def __init__(self):
         self.quizzes = get_default_quizzes()
         self.best_score = None     # 0~100점. 아직 안 풀었으면 None
+        self.menu = [
+            ("퀴즈 풀기", self.play),
+            ("퀴즈 추가", self.add_quiz),
+            ("퀴즈 목록", self.list_quizzes),
+            ("점수 확인", self.show_score),
+            ("종료", None),
+        ]
 
     def run(self):
         print(LINE)
@@ -24,27 +31,18 @@ class QuizGame:
 
         while True:
             self.show_menu()
-            choice = read_int("선택: ", 1, 5)
-            print()
-            if choice == 1:
-                self.play()
-            elif choice == 2:
-                self.add_quiz()
-            elif choice == 3:
-                self.list_quizzes()
-            elif choice == 4:
-                self.show_score()
-            else:
+            choice = read_int("선택: ", 1, len(self.menu))
+            label, handler = self.menu[choice - 1]
+            if handler is None:
                 self.exit_game()
-                break
+                return
+            print()
+            handler()
 
     def show_menu(self):
         print(LINE)
-        print("1. 퀴즈 풀기")
-        print("2. 퀴즈 추가")
-        print("3. 퀴즈 목록")
-        print("4. 점수 확인")
-        print("5. 종료")
+        for number, (label, _) in enumerate(self.menu, start=1):
+            print(f"{number}. {label}")
         print(LINE)
 
     def exit_game(self):
