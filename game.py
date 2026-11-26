@@ -3,7 +3,7 @@
 
 import random
 from default_quizzes import get_default_quizzes
-from input_handler import parse_int, read_int, read_line, read_text
+from input_handler import parse_int, read_int, read_line, read_text, read_yes_no
 from quiz import Quiz
 from storage import StateFileError
 
@@ -24,6 +24,7 @@ class QuizGame:
             ("퀴즈 추가", self.add_quiz),
             ("퀴즈 목록", self.list_quizzes),
             ("점수 확인", self.show_score),
+            ("퀴즈 삭제", self.delete_quiz),
             ("종료", None),
         ]
 
@@ -169,9 +170,29 @@ class QuizGame:
             return
         print(f"🏆 최고 점수: {self.best_score}점\n")
 
+    def delete_quiz(self):
+        if not self.quizzes:
+            print("📭 삭제할 퀴즈가 없습니다.\n")
+            return
+
+        print("🗑️ 삭제할 퀴즈를 고르세요.\n")
+        self._print_quiz_lines()
+        number = read_int(f"삭제할 번호 (1-{len(self.quizzes)}, 취소는 0): ", 0, len(self.quizzes))
+        if number == 0:
+            print("삭제를 취소했습니다.\n")
+            return
+
+        target = self.quizzes[number - 1]
+        if not read_yes_no(f"'{target.question}' 퀴즈를 삭제할까요? (y/n): "):
+            print("삭제를 취소했습니다.\n")
+            return
+
+        self.quizzes.pop(number - 1)
+        self.save_state()
+        print(f"✅ 삭제했습니다. (남은 퀴즈 {len(self.quizzes)}개)\n")
+
     # ------------------------------------------------------------------
     # 파일 저장 / 불러오기
-    # ------------------------------------------------------------------
     def load_state(self):
         """state.json을 불러오고, 화면에 보여줄 안내 문구를 돌려준다."""
         try:
