@@ -150,3 +150,5 @@ python main.py
 | 퀴즈 추가 | 점수 확인 |
 |---|---|
 | ![add](docs/screenshots/add_quiz.png) | ![score](docs/screenshots/score.png)
+
+> clone/pull 실습: 복제한 저장소에서 추가한 줄
