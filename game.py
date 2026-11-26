@@ -2,6 +2,7 @@
 """게임 전체 흐름을 관리하는 QuizGame 클래스."""
 
 import random
+from datetime import datetime
 from default_quizzes import get_default_quizzes
 from input_handler import parse_int, read_int, read_line, read_text, read_yes_no
 from quiz import Quiz
@@ -9,6 +10,7 @@ from storage import StateFileError
 
 POINTS_PER_QUESTION = 10   # 문제당 배점
 HINT_PENALTY = 5           # 힌트를 보고 맞히면 차감되는 점수LINE = "=" * 40
+HISTORY_PREVIEW = 5        # 점수 확인 화면에 보여줄 최근 기록 수
 THIN_LINE = "-" * 40
 
 
@@ -19,6 +21,8 @@ class QuizGame:
         self.store = store
         self.quizzes = []
         self.best_score = None     # 0~100점. 아직 안 풀었으면 None
+        self.best_record = None    # 최고 점수를 낸 게임의 기록(dict)
+        self.history = []          # 모든 게임 기록(dict 목록)
         self.menu = [
             ("퀴즈 풀기", self.play),
             ("퀴즈 추가", self.add_quiz),
@@ -113,9 +117,19 @@ class QuizGame:
             print(f"⚠️ {error}")
 
     def _finish_game(self, total, correct, hints_used, score):
+        record = {
+            "played_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "total": total,
+            "correct": correct,
+            "hints_used": hints_used,
+            "score": score,
+        }
+        self.history.append(record)
+
         is_new_best = self.best_score is None or score > self.best_score
         if is_new_best:
             self.best_score = score
+            self.best_record = record
 
         print(LINE)
         print(f"🏆 결과: {total}문제 중 {correct}문제 정답! ({score}점)")
@@ -168,7 +182,23 @@ class QuizGame:
         if self.best_score is None:
             print("📭 아직 퀴즈를 풀지 않았습니다. '퀴즈 풀기'로 첫 기록을 남겨 보세요!\n")
             return
-        print(f"🏆 최고 점수: {self.best_score}점\n")
+        if self.best_record:
+            detail = f" ({self.best_record['total']}문제 중 {self.best_record['correct']}문제 정답)"
+        else:
+            detail = ""
+        print(f"🏆 최고 점수: {self.best_score}점{detail}")
+
+        if self.history:
+            shown = min(len(self.history), HISTORY_PREVIEW)
+            print(f"\n📜 최근 게임 기록 (전체 {len(self.history)}회 중 최근 {shown}회)")
+            print(THIN_LINE)
+            for record in reversed(self.history[-HISTORY_PREVIEW:]):
+                print(
+                    f"{record['played_at']} | {record['total']}문제 중 {record['correct']}개 정답"
+                    f" | 힌트 {record['hints_used']}회 | {record['score']}점"
+                )
+            print(THIN_LINE)
+        print()
 
     def delete_quiz(self):
         if not self.quizzes:
@@ -228,6 +258,8 @@ class QuizGame:
     def _reset_to_default(self):
         self.quizzes = get_default_quizzes()
         self.best_score = None
+        self.best_record = None
+        self.history = []
 
     def _apply_state(self, data):
         """dict 형태의 상태를 검증해서 속성에 반영한다. 형식이 틀리면 ValueError."""
@@ -241,17 +273,40 @@ class QuizGame:
             raise ValueError("best_score는 0~100 사이 정수 또는 null이어야 합니다.")
 
         # 모든 검증을 통과한 뒤에 한 번에 반영 (중간에 실패하면 아무것도 바뀌지 않음)
+        history = data.get("history", [])
+        if not isinstance(history, list) or not all(self._is_valid_record(r) for r in history):
+            raise ValueError("history 형식이 올바르지 않습니다.")
+
+        best_record = data.get("best_record")
+        if best_record is not None and not self._is_valid_record(best_record):
+            raise ValueError("best_record 형식이 올바르지 않습니다.")
+
+        # 모든 검증을 통과한 뒤에 한 번에 반영 (중간에 실패하면 아무것도 바뀌지 않음)
         self.quizzes = quizzes
         self.best_score = best_score
+        self.best_record = best_record
+        self.history = history
 
     @staticmethod
     def _is_valid_score(value):
         return isinstance(value, int) and not isinstance(value, bool) and 0 <= value <= 100
 
+    @classmethod
+    def _is_valid_record(cls, record):
+        if not isinstance(record, dict) or not isinstance(record.get("played_at"), str):
+            return False
+        for key in ("total", "correct", "hints_used"):
+            value = record.get(key)
+            if not isinstance(value, int) or isinstance(value, bool) or value < 0:
+                return False
+        return cls._is_valid_score(record.get("score"))
+
     def _to_state(self):
         return {
             "quizzes": [quiz.to_dict() for quiz in self.quizzes],
             "best_score": self.best_score,
+            "best_record": self.best_record,
+            "history": self.history,
         }
 
     def save_state(self):
