@@ -2,7 +2,7 @@
 """게임 전체 흐름을 관리하는 QuizGame 클래스."""
 
 from default_quizzes import get_default_quizzes
-from input_handler import read_int
+from input_handler import read_int, read_text
 from quiz import Quiz
 
 POINTS_PER_QUESTION = 10   # 문제당 배점
@@ -86,7 +86,21 @@ class QuizGame:
         print(LINE + "\n")
 
     def add_quiz(self):
-        print("🚧 준비 중입니다.\n")
+        print("📌 새로운 퀴즈를 추가합니다.\n")
+        question = read_text("문제를 입력하세요: ")
+
+        choices = []
+        while len(choices) < Quiz.CHOICE_COUNT:
+            choice = read_text(f"선택지 {len(choices) + 1}: ")
+            if choice in choices:
+                print("⚠️ 이미 입력한 선택지입니다. 다른 내용을 입력하세요.")
+                continue
+            choices.append(choice)
+
+        answer = read_int(f"정답 번호 (1-{Quiz.CHOICE_COUNT}): ", 1, Quiz.CHOICE_COUNT)
+
+        self.quizzes.append(Quiz(question, choices, answer))
+        print("\n✅ 퀴즈가 추가되었습니다!\n") 
 
     def list_quizzes(self):
         print("🚧 준비 중입니다.\n")
