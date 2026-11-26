@@ -58,9 +58,12 @@ class QuizGame:
             print("📭 등록된 퀴즈가 없습니다. 먼저 '퀴즈 추가'로 퀴즈를 등록해 주세요.\n")
             return
 
-        count = len(self.quizzes)
+        available = len(self.quizzes)
+        count = read_int(f"몇 문제를 풀까요? (1-{available}): ", 1, available)
         selected = random.sample(self.quizzes, count)  # 중복 없이 무작위로 뽑기 = 섞기
-        print(f"📝 퀴즈를 시작합니다! (총 {count}문제, 순서 랜덤)")
+
+        print(f"\n📝 퀴즈를 시작합니다! (총 {count}문제, 순서 랜덤)")
+        # 1 → "몇 문제를 풀까요? (1-퀴즈 개수)" / `0`, `99` 거절 / `2` → 2문제만 출제
 
         correct_count = 0
         earned = 0
