@@ -183,10 +183,11 @@ $ python main.py
 
 `best_record`, `history`, `hint`가 없는 예전 형식의 파일도 그대로 불러올 수 있습니다.
 
-### git log --oneline --graph
+## Git 커밋 기록
+
+`git log --oneline --graph` 결과입니다. `feature/play`, `feature/bonus` 브랜치에서 기능을 개발한 뒤 `main`에 병합했습니다.
 
 ```bash
-user@4F-73:~/documents/2026_02_Phthon-Git-Basic$ git --no-pager log --oneline --graph
 * fbdc175 (HEAD -> main, origin/main, origin/HEAD) Docs: clone 실습용 README.md 문구 추가
 * ea4280b Docs: README.md 작성 (개요, 실행 방법, 기능, 파일 구조, state.json 설명
 *   c7e82ea Merge: feature/bonus branch 병합 (보너스 기능)
@@ -221,7 +222,7 @@ user@4F-73:~/documents/2026_02_Phthon-Git-Basic$ git --no-pager log --oneline --
 * c1c2946 Chore: 프로젝트 초기 설정 (.gitignore, README.md 생성)
 ```
 
-![git log --oneline --graph](/docs/screenshots/09.git_log.png)
+![git log --oneline --graph](docs/screenshots/09.git_log.png)
 
 ## 실행 화면
 
