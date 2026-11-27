@@ -1,4 +1,13 @@
+```python
 """state.json 파일 읽기/쓰기를 담당하는 StateStore 클래스."""
+
+```bash
+- 언제 저장하고 실패하면 어떻게 복구할지는 QuizGame 담당
+- 파일 없음 → 기본 퀴즈로 시작하고 새로 저장
+- 파일 손상 → 안내 후 `state.corrupted-날짜시간.json`으로 백업하고 기본 데이터로 복구
+- 저장은 임시 파일에 먼저 쓰고 교체 → 저장 중 끊겨도 기존 파일이 깨지지 않음
+- 퀴즈 추가 직후, 게임 종료 직후, 프로그램 종료 시, Ctrl+C 시 저장
+```
 
 import json
 import os
@@ -68,3 +77,5 @@ class StateStore:
         except OSError:
             return None
         return backup_path
+
+```

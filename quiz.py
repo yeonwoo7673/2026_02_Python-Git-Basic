@@ -3,11 +3,11 @@
 
 
 class Quiz:
-    """문제, 선택지 4개, 정답 번호(1~4)를 가진 퀴즈."""
+    """문제, 선택지 4개, 정답 번호(1~4), 힌트(선택)를 가진 퀴즈."""
 
     CHOICE_COUNT = 4
 
-    def __init__(self, question, choices, answer):
+    def __init__(self, question, choices, answer, hint=""):
         if not isinstance(question, str) or not question.strip():
             raise ValueError("문제가 비어 있습니다.")
         if (
@@ -21,10 +21,18 @@ class Quiz:
             raise ValueError("정답은 정수여야 합니다.")
         if not 1 <= answer <= self.CHOICE_COUNT:
             raise ValueError(f"정답은 1~{self.CHOICE_COUNT} 사이여야 합니다.")
+        if hint is None:
+            hint = ""
+        if not isinstance(hint, str):
+            raise ValueError("힌트는 문자열이어야 합니다.")
 
         self.question = question.strip()
         self.choices = [c.strip() for c in choices]
         self.answer = answer
+        self.hint = hint.strip()
+
+    def has_hint(self):
+        return self.hint != ""
 
     @property
     def answer_text(self):
@@ -33,7 +41,8 @@ class Quiz:
 
     def display(self, number):
         """문제와 선택지를 화면에 출력한다."""
-        print(f"[문제 {number}]")
+        mark = " 💡" if self.has_hint() else ""
+        print(f"[문제 {number}]{mark}")
         print(self.question)
         print()
         for index, choice in enumerate(self.choices, start=1):
@@ -49,6 +58,7 @@ class Quiz:
             "question": self.question,
             "choices": list(self.choices),
             "answer": self.answer,
+            "hint": self.hint,
         }
 
     @classmethod
@@ -57,7 +67,7 @@ class Quiz:
         if not isinstance(data, dict):
             raise ValueError("퀴즈 데이터가 객체 형식이 아닙니다.")
         try:
-            return cls(data["question"], data["choices"], data["answer"])
+            return cls(data["question"], data["choices"], data["answer"], data.get("hint", ""))
         except KeyError as error:
             raise ValueError(f"퀴즈 데이터에 '{error.args[0]}' 항목이 없습니다.") from error
 ```
