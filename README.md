@@ -474,21 +474,30 @@ Fast-forward
 
 ## 실행 화면
 
-| 메뉴 | 퀴즈 풀기 |
-|---|---|
+| 메뉴 |
+|---|
 | ![menu](docs/screenshots/03.quiz_menu.png) |
+
+| 퀴즈 풀기 |
+|---|
 | ![play](docs/screenshots/04-1.quiz_play.png) |
 
-| 퀴즈 추가 | 퀴즈 삭제 |
-|---|---|
+| 퀴즈 추가 |
+|---|
 | ![add](docs/screenshots/05.quiz_add.png)
+
+| 퀴즈 삭제 |
+|---|
 | ![delete](docs/screenshots/06.quiz_delete.png) |
 
-| 예외 처리 | 점수 확인 |
-|---|---|
+| 예외 처리 |
+|---|
 | ![exception](docs/screenshots/04-2.quiz_exception.png)
+
+| 점수 확인 |
+|---|
 | ![score](docs/screenshots/07.quiz_score.png) |
 
 | 퀴즈 목록 |
-|---|---|
+|---|
 | ![list](docs/screenshots/08.quiz_list.png) |
